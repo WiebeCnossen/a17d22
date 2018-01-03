@@ -1,5 +1,6 @@
 #![feature(entry_and_modify)]
 use std::collections::{HashMap, HashSet};
+use std::time;
 
 #[derive(Clone, Copy)]
 enum Wind {
@@ -28,7 +29,7 @@ type Coords = (i32, i32);
 type Grid1 = HashSet<Coords>;
 type Grid2 = HashMap<Coords, Infection>;
 type Grid3 = [[Infection; 2_000]; 2_000];
-type Grid4 = [[usize; 2_000]; 2_000];
+type Grid4 = Vec<[usize; 2_000]>;
 
 use Wind::*;
 use Turn::*;
@@ -147,74 +148,90 @@ fn part4(mut grid: Grid4, mut pos: Coords, n: usize) -> usize {
         if touched == INFECTED {
             count += 1;
         }
-        wind = (wind + TURNS[touched]) % 4;
+        wind = (wind + TURNS[infected]) % 4;
         pos = go(&pos, &WINDS[wind]);
     }
     count
 }
 
+fn timed(label: &str, f: &Fn()) {
+    println!("Starting {}...", label);
+    let start = time::Instant::now();
+    f();
+    let elapsed = start.elapsed();
+    println!("{} : {:?}", label, elapsed);
+}
+
 fn main() {
-    println!("Part 1 - test 7: {}", part1(test_input(&read1), (1, 1), 7));
-    println!(
-        "Part 1 - test 70: {}",
-        part1(test_input(&read1), (1, 1), 70)
-    );
-    println!(
-        "Part 1 - test 10k: {}",
-        part1(test_input(&read1), (1, 1), 10_000)
-    );
-    println!(
-        "Part 1 - challenge: {}",
-        part1(challenge_input(&read1), (12, 12), 10_000)
-    );
+    timed("Part 1", &|| {
+        println!("Part 1 - test 7: {}", part1(test_input(&read1), (1, 1), 7));
+        println!(
+            "Part 1 - test 70: {}",
+            part1(test_input(&read1), (1, 1), 70)
+        );
+        println!(
+            "Part 1 - test 10k: {}",
+            part1(test_input(&read1), (1, 1), 10_000)
+        );
+        println!(
+            "Part 1 - challenge: {}",
+            part1(challenge_input(&read1), (12, 12), 10_000)
+        );
+    });
 
-    println!("Part 2 - test 8: {}", part2(test_input(&read2), (1, 1), 8));
-    println!(
-        "Part 2 - test 100: {}",
-        part2(test_input(&read2), (1, 1), 100)
-    );
-    println!(
-        "Part 2 - test 10M: {}",
-        part2(test_input(&read2), (1, 1), 10_000_000)
-    );
-    println!(
-        "Part 2 - challenge: {}",
-        part2(challenge_input(&read2), (12, 12), 10_000_000)
-    );
+    timed("Part 2", &|| {
+        println!("Part 2 - test 8: {}", part2(test_input(&read2), (1, 1), 8));
+        println!(
+            "Part 2 - test 100: {}",
+            part2(test_input(&read2), (1, 1), 100)
+        );
+        println!(
+            "Part 2 - test 10M: {}",
+            part2(test_input(&read2), (1, 1), 10_000_000)
+        );
+        println!(
+            "Part 2 - challenge: {}",
+            part2(challenge_input(&read2), (12, 12), 10_000_000)
+        );
+    });
 
-    println!(
-        "Part 3 - test 8: {}",
-        part3(test_input(&read3), (1_001, 1_001), 8)
-    );
-    println!(
-        "Part 3 - test 100: {}",
-        part3(test_input(&read3), (1_001, 1_001), 100)
-    );
-    println!(
-        "Part 3 - test 10M: {}",
-        part3(test_input(&read3), (1_001, 1_001), 10_000_000)
-    );
-    println!(
-        "Part 3 - challenge: {}",
-        part3(challenge_input(&read3), (1_012, 1_012), 10_000_000)
-    );
+    timed("Part 3", &|| {
+        println!(
+            "Part 3 - test 8: {}",
+            part3(test_input(&read3), (1_001, 1_001), 8)
+        );
+        println!(
+            "Part 3 - test 100: {}",
+            part3(test_input(&read3), (1_001, 1_001), 100)
+        );
+        println!(
+            "Part 3 - test 10M: {}",
+            part3(test_input(&read3), (1_001, 1_001), 10_000_000)
+        );
+        println!(
+            "Part 3 - challenge: {}",
+            part3(challenge_input(&read3), (1_012, 1_012), 10_000_000)
+        );
+    });
 
-    println!(
-        "Part 4 - test 8: {}",
-        part4(test_input(&read4), (1_001, 1_001), 8)
-    );
-    println!(
-        "Part 4 - test 100: {}",
-        part4(test_input(&read4), (1_001, 1_001), 100)
-    );
-    println!(
-        "Part 4 - test 10M: {}",
-        part4(test_input(&read4), (1_001, 1_001), 10_000_000)
-    );
-    println!(
-        "Part 4 - challenge: {}",
-        part4(challenge_input(&read4), (1_012, 1_012), 10_000_000)
-    );
+    timed("Part 4", &|| {
+        println!(
+            "Part 4 - test 8: {}",
+            part4(test_input(&read4), (1_001, 1_001), 8)
+        );
+        println!(
+            "Part 4 - test 100: {}",
+            part4(test_input(&read4), (1_001, 1_001), 100)
+        );
+        println!(
+            "Part 4 - test 10M: {}",
+            part4(test_input(&read4), (1_001, 1_001), 10_000_000)
+        );
+        println!(
+            "Part 4 - challenge: {}",
+            part4(challenge_input(&read4), (1_012, 1_012), 10_000_000)
+        );
+    });
 }
 
 fn read1(input: &[&str]) -> Grid1 {
@@ -248,7 +265,7 @@ fn read3(input: &[&str]) -> Grid3 {
 }
 
 fn read4(input: &[&str]) -> Grid4 {
-    let mut grid = [[CLEAN; 2_000]; 2_000];
+    let mut grid = vec![[CLEAN; 2_000]; 2_000];
     for (y, s) in input.iter().enumerate() {
         for (x, _) in s.chars().enumerate().filter(|p| p.1 == '#') {
             grid[x + 1_000][y + 1_000] = INFECTED;
