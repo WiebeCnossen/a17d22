@@ -1,0 +1,6 @@
+[package]
+name = "a17d22"
+version = "0.1.0"
+authors = ["Wiebe Cnossen <wiebe.cnossen@gmail.com>"]
+
+[dependencies]
