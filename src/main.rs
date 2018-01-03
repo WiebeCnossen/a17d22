@@ -16,6 +16,14 @@ enum Turn {
     Back,
 }
 
+#[derive(Clone, Copy, PartialEq)]
+enum Infection {
+    Clean,
+    Weakened,
+    Flagged,
+    Infected,
+}
+
 type Coords = (i32, i32);
 type Grid1 = HashSet<Coords>;
 type Grid2 = HashMap<Coords, Infection>;
@@ -23,6 +31,7 @@ type Grid3 = [[Infection; 2_000]; 2_000];
 
 use Wind::*;
 use Turn::*;
+use Infection::*;
 
 fn turn(wind: &Wind, turn: &Turn) -> Wind {
     match (wind, turn) {
@@ -42,15 +51,6 @@ fn orient(infection: &Infection) -> Turn {
         Infected => Right,
     }
 }
-
-#[derive(Clone, Copy, PartialEq)]
-enum Infection {
-    Clean,
-    Weakened,
-    Flagged,
-    Infected,
-}
-use Infection::*;
 
 fn touch(infection: &Infection) -> Infection {
     match *infection {
